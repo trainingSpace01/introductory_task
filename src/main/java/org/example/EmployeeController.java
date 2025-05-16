@@ -13,23 +13,21 @@ import java.util.List;
 @RequestMapping("/employees")
 @RequiredArgsConstructor
 public class EmployeeController {
-
-
     private final EmployeeService employeeService;
     private final EmployeeToDTOMapper employeeToDTOMapper;
 
     @GetMapping("/{id}")
-    public Employee getEmployeeByID(@PathVariable Long id) throws Exception {
+    public EmployeeRequest getEmployeeByID(@PathVariable Long id) throws Exception {
         return employeeService.getEmployeeByID(id);
     }
 
     @GetMapping
-    public List<Employee> getAllEmployees() {
+    public List<EmployeeRequest> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
     @PostMapping
-    public void addEmployee(@RequestBody EmployeeRequest request) {
-        employeeService.addEmployee(employeeToDTOMapper.AddEmployeeRequestToEmployee(request));
+    public void addEmployee(@RequestBody Employee employee) {
+        employeeService.addEmployee(employeeToDTOMapper.AddEmployeeToEmployeeRequest(employee));
     }
 }

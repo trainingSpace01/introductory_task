@@ -1,10 +1,10 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dao.EmployeeEntity;
 import org.example.dao.EmployeeRepository;
-import org.example.mapper.EmployeeToEntityMapper;
+import org.example.mapper.EmployeeToDTOMapper;
 import org.example.userService.model.Employee;
+import org.example.userService.model.EmployeeRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,38 +14,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService{
     private final EmployeeRepository employeeRepository;
-    private final EmployeeToEntityMapper mapper;
+    private final EmployeeToDTOMapper mapper;
 
     @Override
-    public Employee getEmployeeByID(Long id) throws Exception {
-        EmployeeEntity employeeEntity = employeeRepository
+    public EmployeeRequest getEmployeeByID(Long id) throws Exception {
+        Employee employee = employeeRepository
                 .findById(id).
                 orElseThrow(() -> new Exception("Employee not found: id = " + id));
 
-//        return mapper.employeeEntityToEmployee(employeeEntity);
-
-        return new Employee(employeeEntity.getId(),
-                employeeEntity.getFirstName(),
-                employeeEntity.getLastName(),
-                employeeEntity.getPhoneNumber(),
-                employeeEntity.getCompanyID());
+        return mapper.AddEmployeeToEmployeeRequest(employee);
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
+    public List<EmployeeRequest> getAllEmployees() {
 
-        Iterable<EmployeeEntity> iterable = employeeRepository.findAll();
+        Iterable<Employee> iterable = employeeRepository.findAll();
 
-        ArrayList<Employee> employees = new ArrayList<>();
-        for (EmployeeEntity employeeEntity : iterable) {
-            employees.add(mapper.employeeEntityToEmployee(employeeEntity));
+        ArrayList<EmployeeRequest> employees = new ArrayList<>();
+        for (Employee employee : iterable) {
+            employees.add(mapper.AddEmployeeToEmployeeRequest(employee));
         }
         return employees;
     }
 
     @Override
-    public void addEmployee(Employee employee) {
-        EmployeeEntity employeeEntity = mapper.employeeToEntity(employee);
+    public void addEmployee(EmployeeRequest employee) {
+        Employee employeeEntity = mapper.AddEmployeeRequestToEmployee(employee);
         employeeRepository.save(employeeEntity);
     }
 }

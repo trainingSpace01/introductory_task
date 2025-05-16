@@ -1,23 +1,29 @@
 package org.example.userService.model;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Value
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Entity
+@Table(name = "employees")
 public class Employee {
-    Long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column (name = "firstname")
     String firstName;
+
+    @Column (name = "lastname")
     String lastName;
+
+    @Column (name = "phonenumber")
     String phoneNumber;
+
+    @Column (name = "companyid")
     Long companyID;
-
-    public Employee(Long id, String firstName, String lastName, String phoneNumber, Long companyID) {
-
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.companyID = companyID;
-    }
 }
