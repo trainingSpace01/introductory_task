@@ -38,8 +38,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public void addEmployee(EmployeeRequest employee) {
-        Employee employeeEntity = mapper.AddEmployeeRequestToEmployee(employee);
-        employeeRepository.save(employeeEntity);
+    public void addEmployee(EmployeeRequest employeeRequest) {
+        Employee employee = mapper.AddEmployeeRequestToEmployee(employeeRequest);
+        employeeRepository.save(employee);
     }
 }

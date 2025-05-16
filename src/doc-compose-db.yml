@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: card
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123098
+      POSTGRES_DB: local
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres1_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d app_database"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+
+
+volumes:
+  postgres1_data: {}
+
+
+networks:
+  app-network:
+    driver: bridge
