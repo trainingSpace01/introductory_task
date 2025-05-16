@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_DB:       postgres
+      POSTGRES_USER:     leksy
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8088:9090"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL:              jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME:         leksy
+      SPRING_DATASOURCE_PASSWORD:         1234
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+
+      SPRING_JPA_HIBERNATE_DDL_AUTO:               update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:     org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_SHOW_SQL:                         "true"
+
+      SERVER_PORT:   "9090"
+      AUTH_ENABLED:  "false"
+      AUTH_JWT_SECRET: 30faa058f27f690c7e9a098d54ebcfb3d8725bcb85ee7907a2d84c69622229e2
+
+volumes:
+  pgdata:
