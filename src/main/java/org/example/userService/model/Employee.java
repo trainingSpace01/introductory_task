@@ -1,6 +1,7 @@
 package org.example.userService.model;
-
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @Value
@@ -11,11 +12,12 @@ public class Employee {
     String phoneNumber;
     Long companyID;
 
-    public Employee (){
-        this.id = null;
-        this.firstName = null;
-        this.lastName = null;
-        this.phoneNumber = null;
-        this.companyID = null;
+    public Employee(Long id, String firstName, String lastName, String phoneNumber, Long companyID) {
+
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.companyID = companyID;
     }
 }

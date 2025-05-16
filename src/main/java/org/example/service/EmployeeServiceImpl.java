@@ -22,8 +22,13 @@ public class EmployeeServiceImpl implements EmployeeService{
                 .findById(id).
                 orElseThrow(() -> new Exception("Employee not found: id = " + id));
 
+//        return mapper.employeeEntityToEmployee(employeeEntity);
 
-        return mapper.employeeEntityToEmployee(employeeEntity);
+        return new Employee(employeeEntity.getId(),
+                employeeEntity.getFirstName(),
+                employeeEntity.getLastName(),
+                employeeEntity.getPhoneNumber(),
+                employeeEntity.getCompanyID());
     }
 
     @Override
