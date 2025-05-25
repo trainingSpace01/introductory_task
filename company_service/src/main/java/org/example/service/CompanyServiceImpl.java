@@ -89,7 +89,7 @@ public class CompanyServiceImpl implements CompanyService{
         ArrayList<EmployeeRequest> employees = new ArrayList<>();
         for (Long iter: employeesIDs) {
             EmployeeRequest employeeRequest = restTemplate()
-                    .getForObject("http://localhost:9090/employees/out/{id}",
+                    .getForObject("http://localhost:7777/employees/out/{id}",
                             EmployeeRequest.class,
                             iter);
             employees.add(employeeRequest);

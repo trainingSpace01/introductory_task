@@ -18,6 +18,11 @@ public class CompanyController {
     private final CompanyService companyService;
     private final CompanyToDTOMapper mapper;
 
+    @GetMapping("test")
+    public void test(){
+        System.out.println("Connection success");
+    }
+
     @GetMapping("/{id}")
     public CompanyRequest getCompanyByID(@PathVariable Long id)  throws Exception {
         return companyService.getCompanyByID(id);

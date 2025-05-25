@@ -40,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     private EmployeeRequest getEmployeeInfo(Employee employee){
         EmployeeRequest employeeRequest = mapper.AddEmployeeToEmployeeRequest(employee);
         CompanyRequest companyRequest = restTemplate()
-                .getForObject("http://localhost:9091/companies/out/{id}",
+                .getForObject("http://localhost:7777/companies/out/{id}",
                         CompanyRequest.class,
                         employee.getCompanyID());
         employeeRequest.setCompanyRequest(companyRequest);
@@ -64,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         Employee employee = mapper.AddEmployeeRequestToEmployee(employeeRequest);
         employeeRepository.save(employee);
         restTemplate()
-                .put("http://localhost:9091/companies/addEmployee/{e_id}/{c_id}",
+                .put("http://localhost:7777/companies/addEmployee/{e_id}/{c_id}",
                         CompanyRequest.class,
                         employee.getId(),
                         employee.getCompanyID());
