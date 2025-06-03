@@ -8,16 +8,38 @@ services:
       POSTGRES_USER:     antonesko
       POSTGRES_PASSWORD: 123098
     ports:
-      - "5434:5432"
+      - "5433:5433"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  app:
+  company_service:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: company_service/Dockerfile
     ports:
-      - "8088:9090"
+      - "9091:9091"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL:              jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME:         antonesko
+      SPRING_DATASOURCE_PASSWORD:         123098
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+
+      SPRING_JPA_HIBERNATE_DDL_AUTO:               update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:     org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_SHOW_SQL:                         "true"
+
+      SERVER_PORT:   "9091"
+      AUTH_ENABLED:  "false"
+      AUTH_JWT_SECRET: 30faa058f27f690c7e9a098d54ebcfb3d8725bcb85ee7907a2d84c69622229e2
+
+  employee_service:
+    build:
+      context: .
+      dockerfile: employee_service/Dockerfile
+    ports:
+      - "9090:9090"
     depends_on:
       - db
     environment:
@@ -34,5 +56,48 @@ services:
       AUTH_ENABLED:  "false"
       AUTH_JWT_SECRET: 30faa058f27f690c7e9a098d54ebcfb3d8725bcb85ee7907a2d84c69622229e2
 
+  eureka_service:
+    build:
+      context: .
+      dockerfile: eureka_service/Dockerfile
+    ports:
+      - "8761:8761"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: antonesko
+      SPRING_DATASOURCE_PASSWORD: 123098
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_SHOW_SQL: "true"
+
+      SERVER_PORT: "8761"
+      AUTH_ENABLED: "false"
+      AUTH_JWT_SECRET: 30faa058f27f690c7e9a098d54ebcfb3d8725bcb85ee7907a2d84c69622229e2
+
+  zuul_server:
+    build:
+      context: .
+      dockerfile: zuul_server/Dockerfile
+    ports:
+      - "7777:7777"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: antonesko
+      SPRING_DATASOURCE_PASSWORD: 123098
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_SHOW_SQL: "true"
+
+      SERVER_PORT: "7777"
+      AUTH_ENABLED: "false"
+      AUTH_JWT_SECRET: 30faa058f27f690c7e9a098d54ebcfb3d8725bcb85ee7907a2d84c69622229e2
 volumes:
   pgdata:
